@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Metal Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h2>Live Gold & Silver Prices</h2>
+<button onclick="loadData()"> Click Load Data</button>
+
+<canvas id="chart" width="600" height="300"></canvas>
+
+<script>
+async function loadData() {
+    const response = await fetch('/rates');
+    const data = await response.json();
+
+    const labels = data.map(r => r.createdAt);
+    const gold = data.map(r => r.gold);
+    const silver = data.map(r => r.silver);
+
+    new Chart(document.getElementById('chart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                { label: 'Gold', data: gold },
+                { label: 'Silver', data: silver }
+            ]
+        }
+    });
+}
+</script>
+
+</body>
+</html>
